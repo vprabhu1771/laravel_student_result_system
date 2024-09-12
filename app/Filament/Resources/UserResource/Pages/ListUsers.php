@@ -14,7 +14,7 @@ class ListUsers extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
-            Actions\Action::make("Send Notification All")->url(fn (): string => route('send.notification.all')),
+            Actions\Action::make("Send Notification All")->url(fn (): string => route('send.notification.all')),        
         ];
     }
 }

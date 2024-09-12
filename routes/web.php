@@ -9,4 +9,4 @@ Route::get('/', function () {
 use App\Http\Controllers\NotificationController;
 
 Route::get('/send-notification', [NotificationController::class, 'sendNotification'])->name('send.notification.all');
-Route::get('/send-notification/{playerId}', [NotificationController::class, 'sendToUser']);
+Route::get('/send-notification/{playerId}', [NotificationController::class, 'sendToUser'])->name('send.notification.to.user');
