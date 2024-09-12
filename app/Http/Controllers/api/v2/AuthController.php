@@ -66,4 +66,42 @@ class AuthController extends Controller
         Auth::logout();
         return response()->json(['success' => true, 'message' => 'Logout successful']);
     }
+
+    public function register(Request $request)
+    {
+        try{
+            $request->validate([
+                'name'=> 'required|string|max:255',
+                'email'=> 'required|email|unique:users,email',
+                'password'=> 'required',
+                'device_name'=> 'required|string',
+            ]);
+            $user = User::create([
+                'name'=>$request->input('name'),
+                'email'=>$request->input('email'),
+                'password'=>Hash::make($request->input('password')),
+            ]);
+
+            $recipient = $user->email; // Replace with actual recipient's email
+            $subject = 'Custom Subject';
+            $body = 'This is the body of the email. You can include HTML here if needed.';
+
+            Mail::raw($body, function(Message $message) use ($recipient, $subject) {
+                $message->to($recipient);
+                $message->subject($subject);
+                // You can add attachments or other options here if needed
+            });
+            
+            return response()->json(['message'=>'User registered successfully','user'=>$user], 201);
+        }catch(ValidationEception $e){
+            return response()->json(['error' => $e->validate->errors()], 200);
+        }
+    }
+    
+    public function getUser(Request $request)
+    {
+        $user = $request->user();
+        $user->photo_path =url('/storage/' .$user->photo_path);
+        return $user;
+    }
 }

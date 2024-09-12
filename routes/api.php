@@ -10,3 +10,13 @@ Route::get('/user', function (Request $request) {
 use App\http\Controllers\api\v2\AuthController;
 
 Route::post('/login',[AuthController::class,'login']);
+
+Route::post('/register',[AuthController::class,'register']);
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    
+    Route::get('/user', [AuthController::class, 'getUser']);    
+
+    Route::get('/logout', [AuthController::class, 'logout']);
+
+});
